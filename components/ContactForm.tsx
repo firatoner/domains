@@ -9,33 +9,30 @@ interface ContactFormProps {
 
 export default function ContactForm({ domainName, contactEmail }: ContactFormProps) {
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
-    phone: '',
     message: '',
-    offer: '',
   });
 
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
 
-    // Simulate form submission (you can replace this with actual email sending logic)
     try {
       // Create mailto link with pre-filled content
-      const subject = encodeURIComponent(`Inquiry about ${domainName}`);
+      const subject = encodeURIComponent(`Interested in ${domainName}`);
       const body = encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nOffer: ${formData.offer ? '$' + formData.offer : 'Not specified'}\n\nMessage:\n${formData.message}`
+        `From: ${formData.email}\n\n${formData.message}`
       );
 
       window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
 
-      setStatus('success');
-      setFormData({ name: '', email: '', phone: '', message: '', offer: '' });
+      setTimeout(() => {
+        setStatus('success');
+      }, 500);
     } catch (error) {
-      setStatus('error');
+      setStatus('idle');
     }
   };
 
@@ -47,116 +44,58 @@ export default function ContactForm({ domainName, contactEmail }: ContactFormPro
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-xl p-8">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-            Your Name *
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-            placeholder="John Doe"
-          />
+    <div className="w-full">
+      {status === 'success' ? (
+        <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-8 text-center">
+          <div className="text-4xl mb-4">✓</div>
+          <h3 className="text-xl font-bold text-emerald-900 mb-2">Email Client Opened!</h3>
+          <p className="text-emerald-700">Please send the email from your email client.</p>
+          <button
+            onClick={() => setStatus('idle')}
+            className="mt-4 text-emerald-600 hover:text-emerald-700 text-sm font-medium"
+          >
+            Send another message
+          </button>
         </div>
-
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email Address *
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-            placeholder="john@example.com"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-            Phone Number
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-            placeholder="+1 (555) 123-4567"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="offer" className="block text-sm font-medium text-gray-700 mb-2">
-            Your Offer (USD)
-          </label>
-          <div className="relative">
-            <span className="absolute left-4 top-3 text-gray-500">$</span>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
             <input
-              type="number"
-              id="offer"
-              name="offer"
-              value={formData.offer}
+              type="email"
+              name="email"
+              required
+              value={formData.email}
               onChange={handleChange}
-              className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              placeholder="5000"
+              className="w-full px-5 py-4 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-gray-900 placeholder-gray-400"
+              placeholder="your@email.com"
+            />
+            <input
+              type="text"
+              name="message"
+              required
+              value={formData.message}
+              onChange={handleChange}
+              className="w-full px-5 py-4 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-gray-900 placeholder-gray-400"
+              placeholder="Your offer or message..."
             />
           </div>
-        </div>
 
-        <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-            Message *
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            required
-            value={formData.message}
-            onChange={handleChange}
-            rows={5}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition resize-none"
-            placeholder="I'm interested in purchasing this domain..."
-          />
-        </div>
+          <button
+            type="submit"
+            disabled={status === 'submitting'}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            {status === 'submitting' ? 'Opening email...' : 'Contact Owner'}
+          </button>
 
-        {status === 'success' && (
-          <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
-            Thank you! Your email client should open with a pre-filled message.
-          </div>
-        )}
-
-        {status === 'error' && (
-          <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
-            Something went wrong. Please try again or contact us directly at {contactEmail}
-          </div>
-        )}
-
-        <button
-          type="submit"
-          disabled={status === 'submitting'}
-          className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {status === 'submitting' ? 'Sending...' : 'Send Inquiry'}
-        </button>
-
-        <p className="text-center text-sm text-gray-500">
-          Or email us directly at{' '}
-          <a href={`mailto:${contactEmail}`} className="text-blue-600 hover:underline">
-            {contactEmail}
-          </a>
-        </p>
-      </form>
+          <p className="text-center text-sm text-gray-500">
+            or email directly:{' '}
+            <a href={`mailto:${contactEmail}`} className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+              {contactEmail}
+            </a>
+          </p>
+        </form>
+      )}
     </div>
   );
 }
