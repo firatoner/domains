@@ -46,13 +46,13 @@ export default function ContactForm({ domainName, contactEmail }: ContactFormPro
   return (
     <div className="w-full">
       {status === 'success' ? (
-        <div className="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-8 text-center">
+        <div className="bg-emerald-500/10 border-2 border-emerald-500/30 rounded-2xl p-8 text-center backdrop-blur-sm">
           <div className="text-4xl mb-4">✓</div>
-          <h3 className="text-xl font-bold text-emerald-900 mb-2">Email Client Opened!</h3>
-          <p className="text-emerald-700">Please send the email from your email client.</p>
+          <h3 className="text-xl font-bold text-emerald-400 mb-2">Email Client Opened!</h3>
+          <p className="text-emerald-300/80">Please send the email from your email client.</p>
           <button
             onClick={() => setStatus('idle')}
-            className="mt-4 text-emerald-600 hover:text-emerald-700 text-sm font-medium"
+            className="mt-4 text-emerald-400 hover:text-emerald-300 text-sm font-medium transition-colors"
           >
             Send another message
           </button>
@@ -66,7 +66,7 @@ export default function ContactForm({ domainName, contactEmail }: ContactFormPro
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-5 py-4 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-gray-900 placeholder-gray-400"
+              className="w-full px-5 py-4 bg-gray-900/50 border-2 border-gray-800 rounded-xl focus:border-blue-500 focus:bg-gray-900/70 focus:outline-none transition-all text-white placeholder-gray-500 backdrop-blur-sm"
               placeholder="your@email.com"
             />
             <input
@@ -75,7 +75,7 @@ export default function ContactForm({ domainName, contactEmail }: ContactFormPro
               required
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-5 py-4 bg-white border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors text-gray-900 placeholder-gray-400"
+              className="w-full px-5 py-4 bg-gray-900/50 border-2 border-gray-800 rounded-xl focus:border-blue-500 focus:bg-gray-900/70 focus:outline-none transition-all text-white placeholder-gray-500 backdrop-blur-sm"
               placeholder="Your offer or message..."
             />
           </div>
@@ -83,14 +83,14 @@ export default function ContactForm({ domainName, contactEmail }: ContactFormPro
           <button
             type="submit"
             disabled={status === 'submitting'}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-all shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98]"
           >
             {status === 'submitting' ? 'Opening email...' : 'Contact Owner'}
           </button>
 
           <p className="text-center text-sm text-gray-500">
             or email directly:{' '}
-            <a href={`mailto:${contactEmail}`} className="text-blue-600 hover:text-blue-700 font-medium transition-colors">
+            <a href={`mailto:${contactEmail}`} className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
               {contactEmail}
             </a>
           </p>

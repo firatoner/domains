@@ -4,20 +4,34 @@
 
 @layer base {
   * {
-    @apply border-gray-200;
+    @apply border-gray-800;
   }
 
   body {
-    @apply text-gray-900 antialiased;
+    @apply text-white antialiased bg-black;
   }
 
   html {
-    @apply scroll-smooth;
+    @apply scroll-smooth bg-black;
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  @keyframes gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
   }
 }
