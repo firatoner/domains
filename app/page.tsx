@@ -1,5 +1,25 @@
 import { getCurrentDomain, formatPrice } from '@/lib/domain-utils';
 import ContactForm from '@/components/ContactForm';
+import type { Metadata } from 'next';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const domain = await getCurrentDomain();
+
+  return {
+    title: `${domain.name} - Premium Domain For Sale`,
+    description: domain.description,
+    openGraph: {
+      title: `${domain.name} - For Sale`,
+      description: domain.description,
+      siteName: domain.name,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${domain.name} - For Sale`,
+      description: domain.description,
+    },
+  };
+}
 
 export default async function Home() {
   const domain = await getCurrentDomain();
